@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZEKİ-BİLGİ AI · Tanıtım Prototipi v0.5</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#18283a;background:#f5f7fb}
+*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer}
+.app{display:grid;grid-template-columns:265px minmax(0,1fr);min-height:100vh}
+.sidebar{background:#12243b;color:white;padding:30px 18px;display:flex;flex-direction:column;gap:22px}
+.brand{padding:0 12px;font-size:22px;font-weight:800;letter-spacing:-.6px}.brand small{display:block;font-size:11px;letter-spacing:1.8px;color:#a9c3dc;margin-top:5px}
+.nav-label{font-size:11px;letter-spacing:1.4px;color:#91abc4;margin:10px 12px}
+.nav{display:grid;gap:8px}.nav button{display:flex;align-items:center;gap:13px;text-align:left;border:1px solid transparent;background:transparent;color:#d7e4f1;border-radius:13px;padding:14px 12px}
+.nav button .ico{font-size:23px}.nav button span:last-child{font-size:14px;font-weight:600}.nav button.active{background:#274766;color:white;border-color:#4b7295}
+.sidefoot{margin-top:auto;color:#a9c3dc;font-size:12px;line-height:1.7;padding:12px}
+.main{min-width:0;padding:32px clamp(16px,4vw,60px);max-width:1250px;width:100%;margin:auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:30px}
+.kicker{color:#517391;text-transform:uppercase;letter-spacing:1.5px;font-size:11px;font-weight:800}
+h1{font-size:clamp(26px,3vw,39px);letter-spacing:-1.3px;margin:8px 0}p{line-height:1.55}
+.tag{background:#e7eff7;color:#355775;padding:9px 13px;border-radius:30px;font-size:12px;font-weight:700}
+.hero{background:linear-gradient(110deg,#dbeaf6,#eff7fa);padding:26px;border-radius:22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.hero p{color:#50687e;margin:8px 0 0}.hero .hero-icon{font-size:55px}
+.panel{background:#fff;border:1px solid #e4ebf2;border-radius:22px;box-shadow:0 10px 35px #152a4b08;overflow:hidden}
+.panelhead{padding:22px 24px;border-bottom:1px solid #e9eef4;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.panelhead h2{margin:0;font-size:18px}.panelhead small{display:block;color:#708399;margin-top:5px}
+.chat{height:360px;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:15px}
+.message{max-width:85%;align-self:flex-start}.message.mine{align-self:flex-end}
+.bubble{background:#f0f5f9;border-radius:17px 17px 17px 4px;padding:14px 17px;white-space:pre-line;line-height:1.65;font-size:14px}
+.mine .bubble{background:#214b70;color:#fff;border-radius:17px 17px 4px 17px}
+.msgtools{margin-top:6px;display:flex;gap:8px}.listen{background:transparent;border:1px solid #d7e2ec;border-radius:9px;padding:7px 10px;color:#315c80;font-size:12px}
+.suggestions{padding:0 24px 15px;display:flex;gap:8px;flex-wrap:wrap}
+.suggestions button{border:1px solid #cbdbe8;background:#f8fbfe;color:#315673;border-radius:10px;padding:9px 12px;font-size:12px;text-align:left}
+.compose{border-top:1px solid #e9eef4;display:flex;gap:10px;padding:17px 24px}
+.compose input{min-width:0;flex:1;border:1px solid #d5e0e9;border-radius:12px;padding:13px 15px;outline-color:#3b82b6}
+.primary{background:#215779;color:white;border:0;border-radius:12px;padding:12px 20px;font-weight:700}
+.status{font-size:12px;color:#5b748b;padding:0 24px 14px;min-height:32px}
+.notice{font-size:12px;color:#6b7d90;margin:18px 4px;line-height:1.7}
+.mobile-nav{display:none}
+@media(max-width:760px){.app{display:block}.sidebar{display:none}.main{padding:18px 14px 90px}.top{margin-bottom:16px}.hero{padding:20px}.hero .hero-icon{font-size:38px}.panelhead{padding:17px}.chat{padding:16px;height:350px}.suggestions{padding:0 16px 15px}.compose{padding:13px}.status{padding:0 14px 12px}.mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(4,1fr);bottom:0;left:0;right:0;background:#fff;border-top:1px solid #dce6ee;padding:8px 5px max(8px,env(safe-area-inset-bottom));z-index:5}.mobile-nav button{border:0;background:none;color:#60758a;font-size:10px;display:grid;justify-items:center;gap:3px;padding:6px 1px}.mobile-nav button b{font-size:20px}.mobile-nav button.active{color:#185c8c;font-weight:800}}
+
+:root{--ink:#172b42;--accent:#126a82}body{background:#f6f8fb}.sidebar{background:linear-gradient(170deg,#112a42,#153b4c)}.brand{font-size:21px}.nav button.active{background:#e5f3f4;color:#153a49;border-color:#b9dfe1}.hero{background:linear-gradient(115deg,#dff2f0,#e9f1fb);border:1px solid #d3e6e9;min-height:122px}.panel{margin-bottom:18px}.tag{background:#e3f3ed;color:#24624b}.feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}.feature-card{border:1px solid #dce7ed;background:white;border-radius:16px;padding:16px;text-align:left;min-height:106px;box-shadow:0 4px 15px #183a4b08}.feature-card b{display:block;margin:8px 0 4px;font-size:14px}.feature-card small{color:#698092;font-size:12px;line-height:1.4;display:block}.feature-card:focus-visible,.nav button:focus-visible,.listen:focus-visible{outline:3px solid #63a8bd}.toolcontent{padding:22px 24px;line-height:1.65}.toolcontent h3{margin:0 0 10px}.toolcontent ol{padding-left:23px}.toolcontent li{margin-bottom:8px}.toolcontent .helper{color:#63788b;font-size:13px}.adminlink{background:#284b5e;color:#fff;border:1px solid #426879;border-radius:12px;padding:14px;width:100%;text-align:left}.adminlink span{float:right;color:#b8e5d9;font-size:10px}.adminstats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}.adminstats div{padding:14px;border-radius:12px;background:#f0f6f8}.adminstats strong{display:block;font-size:22px}.adminstats small{color:#5b7180}.knowledge-item{border-bottom:1px solid #e5ecf1;padding:10px 0}.knowledge-item b{display:block}.knowledge-item p{margin:4px 0;color:#586c7d;font-size:13px}.knowledgeform{display:grid;gap:10px;margin-top:20px}.knowledgeform input,.knowledgeform textarea{padding:12px;border:1px solid #d5e1e9;border-radius:10px;font:inherit;max-width:100%}.knowledgeform label{font-size:13px;font-weight:700}.knowledgeform button{justify-self:start}.adminpanel[hidden],.toolpanel[hidden],#chatPanel[hidden],.feature-grid[hidden]{display:none}.side-extra{margin-top:10px}
+@media(max-width:760px){.feature-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.feature-card{padding:11px 8px;min-height:115px}.feature-card b{font-size:12px}.feature-card small{font-size:10px}.toolcontent{padding:16px}.adminstats{grid-template-columns:1fr}.adminlink{display:none}.adminpanel .panelhead{align-items:flex-start}.hero{min-height:108px}.chat{height:320px}}
+</style></head>
+<body><div class="app">
+<aside class="sidebar"><div class="brand">✦ ZEKİ-BİLGİ AI<small>AKILLI DESTEK PLATFORMU</small></div><div><div class="nav-label">KULLANICI ALANLARI</div><nav class="nav" id="desktopNav"></nav></div><div class="side-extra"><button type="button" class="adminlink" onclick="openAdmin()">⚙️ Yönetici paneli <span>DEMO</span></button></div><div class="sidefoot">Tanıtım prototipi · v0.5<br>Gerçek kişisel veri girmeyiniz.</div></aside>
+<main class="main"><div class="top"><div><div class="kicker">ZEKİ Yaşam Merkezi</div><h1 id="pageTitle">Çalışan Asistanı</h1></div><button class="tag" type="button" onclick="openAdmin()" style="border:0;cursor:pointer">⚙ Yönetici · Demo</button></div>
+<section class="hero"><div><strong id="heroTitle">Birlikte, adım adım.</strong><p id="heroDesc">İhtiyacınız olan desteği kolayca bulun.</p></div><div class="hero-icon" id="heroIcon">🌱</div></section>
+<div class="feature-grid" id="featureGrid"></div><section class="panel" id="chatPanel"><div class="panelhead"><div><h2>Akıllı Destek Sohbeti</h2><small>Örnek sorularla uygulamayı deneyin</small></div><button class="listen" id="stopSpeech" type="button">■ Sesi durdur</button></div>
+<div class="chat" id="chat" aria-live="polite"></div>
+<div class="suggestions" id="suggestions"></div>
+<form class="compose" id="form"><input id="question" aria-label="Sorunuz" placeholder="Bir soru yazın..." required autocomplete="off"><button class="primary" type="submit">Gönder →</button></form>
+<div style="padding:0 24px 12px"><button class="listen" type="button" id="testSpeech">🎤 Ses testini başlat</button></div><div class="status" id="status" role="status">🔊 Dinle veya Ses testini başlat düğmesine dokunun. Sonuç kodunu bize iletin.</div></section>
+<section class="panel toolpanel" id="toolPanel"><div class="panelhead"><div><h2 id="toolTitle">Örnek rehber</h2><small id="toolSubtitle">Kullanıcı grubuna özel destek içeriği</small></div></div><div class="toolcontent" id="toolContent"></div></section><section class="panel adminpanel" id="adminPanel" hidden><div class="panelhead"><div><h2>Yönetici Paneli · Demo</h2><small>Bu alan yalnızca arayüz simülasyonudur, gerçek yetkilendirme içermez.</small></div><button class="listen" onclick="closeAdmin()">✕ Kapat</button></div><div class="toolcontent"><div class="adminstats"><div><strong id="docCount">4</strong><small>Örnek bilgi kaydı</small></div><div><strong>4</strong><small>Kullanıcı modülü</small></div><div><strong>Demo</strong><small>Veriler yalnızca bu oturumda</small></div></div><h3>Bilgi kütüphanesi</h3><div id="knowledgeList"></div><form id="knowledgeForm" class="knowledgeform"><label for="knowledgeTitle">Yeni örnek bilgi başlığı</label><input id="knowledgeTitle" maxlength="80" placeholder="Örn. İş güvenliği hatırlatmaları" required><label for="knowledgeText">Bilgi içeriği</label><textarea id="knowledgeText" rows="3" maxlength="1000" placeholder="Örnek kurum içeriği yazın..." required></textarea><button class="primary">Demo kaydı ekle</button></form><p class="notice">Bu bilgiler yalnızca tarayıcı oturumunda tutulur. AI eğitimi veya gerçek kurum veri tabanı değildir. Gerçek kişisel veri eklemeyin.</p></div></section><p class="notice">Bu bir tanıtım prototipidir. Gerçek yapay zekâ bağlantısı yoktur. Yanıtlar örnek senaryolardır; kurumsal onaylı bilgi veya uzman değerlendirmesi yerine geçmez. Sesli okuma cihazın ve tarayıcının Türkçe ses desteğine bağlıdır.</p>
+</main></div><nav class="mobile-nav" id="mobileNav" aria-label="Kullanıcı alanları"></nav>
+<script>
+const data={employee:{name:'ZEKİ Çalışanı',emoji:'👤',title:'Çalışan Asistanı',intro:'Merhaba! Birlikte adım adım ilerleyebiliriz.',qs:['İşimi yaparken zorlanırsam ne yapmalıyım?','Mola saatinde ne yapmalıyım?','İş arkadaşım bana kızarsa ne yapmalıyım?'],answers:['1. İşini güvenli şekilde durdur.\n2. Usta öğreticine haber ver.\n3. Anlamadığın adımı göstermesini iste.\n4. Hazır olduğunda tekrar dene.','1. Mola saatini sorumlu kişiden öğren.\n2. Güvenli mola alanına git.\n3. Su iç, dinlen ve mola bitince görevine dön.','1. Sakin kalmaya çalış.\n2. Tartışmayı büyütme.\n3. Rahatsız olursan usta öğreticine veya güvendiğin bir görevliye söyle.']},family:{name:'Aile',emoji:'🏠',title:'Aile Bilgilendirme',intro:'İşe uyum ve evde destek konularında örnek öneriler sunabilirim.',qs:['Yakınım işe gitmek istemiyor. Ne yapabilirim?','Evde becerilerini nasıl destekleyebilirim?','Kurumla nasıl iletişim kurmalıyım?'],answers:['Önce neden gitmek istemediğini sakin bir şekilde dinleyin. Duygusunu önemseyin. Baskı kurmadan, ilgili kurum uzmanıyla birlikte nedenleri ve uygun destekleri değerlendirin.','Kurumda çalışılan beceriyi küçük adımlara ayırın. Evde güvenli ve kısa tekrarlar yapın. Başarıyı fark edip olumlu geri bildirim verin.','Somut gözlemlerinizi paylaşın, ortak hedefler belirleyin ve izlenecek adımları kurumun yetkili personeliyle birlikte kararlaştırın.']},teacher:{name:'Usta Öğretici',emoji:'📘',title:'Usta Öğretici Desteği',intro:'Beceri analizi ve öğretim planı için örnek taslaklar hazırlayabilirim.',qs:['Paketleme sırasını karıştıran çalışana nasıl öğretmeliyim?','Beceri analizi nasıl hazırlanır?','İpuçlarını nasıl azaltabilirim?'],answers:['Örnek öğretim planı:\n1. Paketleme görevini gözlenebilir küçük adımlara ayırın.\n2. Her adım için görsel sıra kartı hazırlayın.\n3. Gereken en az desteği belirleyin.\n4. Doğru uygulamaları pekiştirin.\n5. Bağımsız tamamlanan adımları kaydedin.\n6. Planı bireyin gereksinimlerine göre uzmanla gözden geçirin.','Önce hedef beceriyi tanımlayın. Başlangıç koşulunu, sıralı davranış adımlarını, gerekli malzemeleri ve başarı ölçütünü yazın. Her adım için bağımsız/ipuçlu performansı kaydedin.','İpuçlarını kişinin başarısını ve güvenliğini gözeterek kademeli azaltın. Her oturumda bağımsızlık düzeyini kaydedin ve gerektiğinde planı yeniden düzenleyin.']},coach:{name:'İş Koçu',emoji:'💼',title:'İş Koçu Rehberliği',intro:'İş uyumu ve mesleki gelişim için değerlendirme taslakları sunabilirim.',qs:['Ana fabrikaya geçişe hazır olma nasıl değerlendirilir?','İş yeri uyarlaması nasıl planlanır?','Performans nasıl izlenir?'],answers:['Örnek kontrol listesi:\n• Görevleri güvenli tamamlama\n• Gerekli destek düzeyi\n• Devamlılık ve iş rutini\n• İletişim ve yardım isteme\n• Yeni ortamda uyum\nBu liste tek başına geçiş kararı değildir. Çalışanın görüşü ve yetkili ekibin değerlendirmesi esastır.','İşin gerekliliklerini ve çalışanın güçlü yönlerini birlikte değerlendirin. Ortam, araç, görev sırası ve doğal destekler için uygun düzenlemeler planlayın; uygulama sonrası geri bildirim alın.','Ölçülebilir görev hedefleri belirleyin. Görev tamamlama, hata türü, destek düzeyi ve çalışan geri bildirimini düzenli kaydedin. Verileri yalnızca yetkili kişilerle paylaşın.']}};
+const meta={
+ employee:{icon:'👤',short:'Çalışan',headline:'Birlikte, adım adım.',desc:'Günlük işlerinizi güvenle öğrenmek için destek alın.'},
+ family:{icon:'🏡',short:'Aile',headline:'Yanınızdayız.',desc:'Evde destek, iletişim ve işe uyum hakkında bilgi alın.'},
+ teacher:{icon:'📚',short:'Öğretici',headline:'Öğrenmeyi kolaylaştırın.',desc:'Beceri analizi ve öğretim süreçleri için örnekler inceleyin.'},
+ coach:{icon:'🤝',short:'İş Koçu',headline:'Gelişimi birlikte destekleyin.',desc:'Mesleki uyum ve istihdam için rehberlik örnekleri.'}
+};
+let role='employee', lastAnswer='';
+const $=id=>document.getElementById(id);
+let activeUtterance=null, speechWatch=null, speechToken=0;
+function stop(){
+ speechToken++;
+ if(speechWatch)clearTimeout(speechWatch);
+ if('speechSynthesis' in window){try{window.speechSynthesis.cancel();}catch(e){}}
+ activeUtterance=null;
+}
+function say(text){
+ const status=$('status');
+ stop();
+ const token=speechToken;
+ if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined'){
+   status.textContent='❌ S0: Tarayıcı konuşma API’sini desteklemiyor.';return;
+ }
+ try{
+  const synth=window.speechSynthesis;
+  const voices=synth.getVoices();
+  const turkish=voices.find(v=>v.lang.toLowerCase()==='tr-tr')||voices.find(v=>v.lang.toLowerCase().startsWith('tr'));
+  const u=new SpeechSynthesisUtterance(text);
+  activeUtterance=u;
+  u.lang='tr-TR';u.rate=0.9;u.pitch=1;u.volume=1;
+  if(turkish)u.voice=turkish;
+  let started=false;
+  u.onstart=()=>{if(token!==speechToken)return;started=true;status.textContent='🔊 S1: Ses başladı. Türkçe ses: '+(turkish?turkish.name:'varsayılan')+'.';};
+  u.onend=()=>{if(token!==speechToken)return;status.textContent='✓ S2: Okuma tamamlandı.';activeUtterance=null;};
+  u.onerror=e=>{if(token!==speechToken)return;status.textContent='❌ S3: Konuşma hatası: '+e.error+' · Ses sayısı: '+voices.length;activeUtterance=null;};
+  status.textContent='⏳ S4: Başlatılıyor · Türkçe ses: '+(turkish?turkish.name:'bulunamadı')+' · Toplam ses: '+voices.length;
+  // iOS için speak() doğrudan dokunma olayının içinde çağrılır; gecikmeli başlatılmaz.
+  synth.speak(u);
+  speechWatch=setTimeout(()=>{
+   if(token!==speechToken||started)return;
+   status.textContent='⚠️ S5: Konuşma başlamadı · Ses sayısı: '+synth.getVoices().length+' · Kuyruk: '+synth.pending+' · Konuşuyor: '+synth.speaking+'. Ekran görüntüsü gönderin.';
+  },4500);
+ }catch(e){status.textContent='❌ S6: JavaScript hatası: '+e.message;}
+}
+function bubble(t,mine=false){
+ const wrap=document.createElement('div');wrap.className='message'+(mine?' mine':'');
+ const b=document.createElement('div');b.className='bubble';b.textContent=t;wrap.appendChild(b);
+ if(!mine){const tools=document.createElement('div');tools.className='msgtools';
+ const btn=document.createElement('button');btn.className='listen';btn.type='button';btn.textContent='🔊 Dinle';btn.addEventListener('click',()=>say(t));tools.appendChild(btn);wrap.appendChild(tools);}
+ $('chat').appendChild(wrap);$('chat').scrollTop=$('chat').scrollHeight;
+}
+function setRole(r){
+ stop();role=r;lastAnswer='';
+ const d=data[r],m=meta[r];
+ $('pageTitle').textContent=d.title;$('heroTitle').textContent=m.headline;$('heroDesc').textContent=m.desc;$('heroIcon').textContent=m.icon;
+ $('chat').replaceChildren();$('suggestions').replaceChildren();
+ for(const id of ['desktopNav','mobileNav']){$(id).replaceChildren();Object.keys(data).forEach(k=>{
+ const a=document.createElement('button');a.type='button';a.className=k===role?'active':'';
+ if(id==='desktopNav'){const i=document.createElement('span');i.className='ico';i.textContent=meta[k].icon;const s=document.createElement('span');s.textContent=data[k].name;a.append(i,s);}
+ else{const i=document.createElement('b');i.textContent=meta[k].icon;const s=document.createElement('span');s.textContent=meta[k].short;a.append(i,s);}
+ a.onclick=()=>setRole(k);$(id).append(a);
+ });}
+ d.qs.forEach(q=>{const b=document.createElement('button');b.type='button';b.textContent=q;b.onclick=()=>ask(q);$('suggestions').append(b);});
+ bubble(d.intro);$('status').textContent='🔊 Dinle veya Ses testini başlat düğmesine dokunun. Sonuç kodunu bize iletin.';
+}
+function ask(q){
+ stop();bubble(q,true);const d=data[role];let i=d.qs.indexOf(q);
+ if(i<0){const normalized=q.toLocaleLowerCase('tr');i=d.qs.findIndex(x=>x.toLocaleLowerCase('tr').split(' ').some(w=>w.length>5&&normalized.includes(w.replace(/[?.]/g,''))));}
+ lastAnswer=i>=0?d.answers[i]:'Bu soruya ilişkin doğrulanmış kurum bilgisi henüz demo sisteminde bulunmuyor. Lütfen ilgili ZEKİ yetkilisine danışın.';
+ bubble(lastAnswer);
+}
+$('form').addEventListener('submit',e=>{e.preventDefault();const q=$('question').value.trim();if(q)ask(q);$('question').value='';});
+$('testSpeech').onclick=()=>say('Merhaba. Bu, ZEKİ BİLGİ yapay zekâ uygulamasının Türkçe ses testidir.');
+$('stopSpeech').onclick=()=>{stop();$('status').textContent='■ Sesli okuma durduruldu.';};
+setRole('employee');
+
+const featureDetails={
+ employee:{cards:[['🧩','Görev adımları','İşi küçük parçalara ayır'],['🛡️','Güvenli çalışma','Güvenliğe öncelik ver'],['💬','Yardım isteme','Destek almayı öğren']],title:'Örnek görev rehberi: Paketleme',subtitle:'Görsel ve sesli anlatıma uygun adım taslağı',steps:['Çalışma alanının güvenli olduğunu kontrol et.','Gerekli malzemeleri hazırla.','Ürünü gösterilen sırayla yerleştir.','Paketin kapandığını kontrol et.','Zorlandığında usta öğreticiden yardım iste.']},
+ family:{cards:[['🏡','Evde destek','Küçük adımlarla pekiştirme'],['💬','İletişim','Olumlu ve açık konuşma'],['🤲','İş birliği','Kurumla ortak hedefler']],title:'Örnek aile destek rehberi',subtitle:'Günlük hayatta uygulanabilecek genel öneriler',steps:['Yakınınızın görüşünü ve tercihlerini dinleyin.','Öğrenilen becerileri kısa ve güvenli tekrarlarla destekleyin.','İlerlemeyi somut örneklerle fark edin.','Zorlandığınız durumları kurumun yetkili uzmanıyla görüşün.']},
+ teacher:{cards:[['🧩','Beceri analizi','Görevleri adımlara böl'],['🗂️','Öğretim planı','Örnek plan oluştur'],['📊','Veri kaydı','İlerlemeyi takip et']],title:'Örnek öğretim planı: Paketleme',subtitle:'Bireyselleştirme için uzman değerlendirmesi gerekir',steps:['Hedef beceriyi ve başlangıç düzeyini tanımlayın.','Paketleme sürecini gözlenebilir adımlara ayırın.','Görsel ipucu ve model olma seçeneklerini belirleyin.','İpuçlarını başarıya göre kademeli azaltın.','Bağımsız tamamlanan adımları kaydedin ve planı gözden geçirin.']},
+ coach:{cards:[['🧭','Mesleki profil','Güçlü yönleri belirle'],['🏭','İşe uyum','Ortamı ve desteği planla'],['📈','Gelişim takibi','Ölçütleri izle']],title:'Örnek iş koçu kontrol listesi',subtitle:'Karar aracı değil, görüşme ve değerlendirme taslağı',steps:['Çalışanın kendi hedef ve tercihlerini öğrenin.','Görevleri güvenli yapabilme düzeyini gözlemleyin.','Gereken destek ve iş yeri uyarlamalarını belirleyin.','İletişim ve yardım isteme becerilerini değerlendirin.','Geçiş kararını yetkili ekip ve çalışanla birlikte ele alın.']}
+};
+const originalSetRole=setRole;
+setRole=function(r){closeAdmin(false);originalSetRole(r);renderFeatures(r);};
+function renderFeatures(r){const d=featureDetails[r];$('featureGrid').replaceChildren();d.cards.forEach(([emoji,title,desc],i)=>{const b=document.createElement('button');b.type='button';b.className='feature-card';const ic=document.createElement('div');ic.textContent=emoji;const h=document.createElement('b');h.textContent=title;const t=document.createElement('small');t.textContent=desc;b.append(ic,h,t);b.onclick=()=>{if(i===1&&r==='employee')say('Önce güvenliğini kontrol et. Zorlanırsan işi durdur ve usta öğreticinden yardım iste.');else{$('toolPanel').scrollIntoView({behavior:'smooth',block:'center'});}};$('featureGrid').append(b);});$('toolTitle').textContent=d.title;$('toolSubtitle').textContent=d.subtitle;const c=$('toolContent');c.replaceChildren();const ol=document.createElement('ol');d.steps.forEach(x=>{const li=document.createElement('li');li.textContent=x;ol.append(li)});c.append(ol);const btn=document.createElement('button');btn.className='listen';btn.type='button';btn.textContent='🔊 Bu rehberi dinle';btn.onclick=()=>say(d.steps.join('. '));c.append(btn);const note=document.createElement('p');note.className='helper';note.textContent='Bu rehber tanıtım için hazırlanmış örnek içeriktir.';c.append(note);}
+let knowledge=[['İş güvenliği','Önce güvenli çalış, zorlandığında yetkili kişiden yardım iste.'],['İletişim','Sorularını açıkça sor ve gerektiğinde destek iste.'],['Öğretim rehberi','Beceri adımlarını bireysel gereksinimlere göre planla.'],['İş koçluğu','Çalışanın katılımını ve görüşünü değerlendirmeye dahil et.']];
+function renderKnowledge(){const list=$('knowledgeList');list.replaceChildren();knowledge.forEach(([title,body])=>{const div=document.createElement('div');div.className='knowledge-item';const b=document.createElement('b');b.textContent=title;const p=document.createElement('p');p.textContent=body;div.append(b,p);list.append(div)});$('docCount').textContent=knowledge.length;}
+function openAdmin(){stop();$('adminPanel').hidden=false;$('chatPanel').hidden=true;$('toolPanel').hidden=true;$('featureGrid').hidden=true;$('heroTitle').textContent='İçerik yönetimi · Demo';$('heroDesc').textContent='Örnek bilgi kayıtlarını inceleyin veya oturumluk kayıt ekleyin.';renderKnowledge();$('adminPanel').scrollIntoView({behavior:'smooth',block:'start'});}
+function closeAdmin(reset=true){$('adminPanel').hidden=true;$('chatPanel').hidden=false;$('toolPanel').hidden=false;$('featureGrid').hidden=false;if(reset&&data[role]){$('heroTitle').textContent=meta[role].headline;$('heroDesc').textContent=meta[role].desc;}}
+$('knowledgeForm').addEventListener('submit',e=>{e.preventDefault();const title=$('knowledgeTitle').value.trim(),body=$('knowledgeText').value.trim();if(!title||!body)return;knowledge.push([title,body]);$('knowledgeForm').reset();renderKnowledge();});
+renderFeatures(role);
+
+</script></body></html>
